@@ -234,7 +234,7 @@ def reminders():
         reminders = []
     return render_template("reminders.html", reminders=reminders, exams=exams)
 
-@app.route("/reminders/<id>", methods=["POST"])
+@app.route("/reminders/<id>", methods=["DELETE"])
 def delete_reminder(id):
     if not is_authenticated():
         return redirect(url_for("login"))
