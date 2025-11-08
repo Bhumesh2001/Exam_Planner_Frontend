@@ -1,0 +1,105 @@
+{% extends "base.html" %} {% block title %}Admin — Exam Planner{% endblock %} {%
+block content %}
+
+<div class="w-full px-8 py-6">
+  <header
+    class="flex justify-between items-center mb-8 border-b border-gray-700 pb-4"
+  >
+    <h2 class="text-3xl font-bold text-white">Admin Panel</h2>
+    <a
+      href="{{ url_for('logout') }}"
+      class="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg text-white font-medium transition"
+      >Logout</a
+    >
+  </header>
+
+  <!-- Users Section -->
+  <section
+    class="bg-gray-900/70 backdrop-blur-md border border-gray-700 rounded-2xl shadow-xl p-8 mb-10"
+  >
+    <div class="flex justify-between items-center mb-6">
+      <h3 class="text-2xl font-semibold text-white">Registered Users</h3>
+      <div class="text-gray-400 text-sm">
+        Total Users:
+        <span class="text-blue-400 font-medium">{{ users|length }}</span>
+      </div>
+    </div>
+
+    {% if users %}
+    <div class="overflow-x-auto">
+      <table class="min-w-full text-sm border-collapse">
+        <thead class="text-gray-400 border-b border-gray-700">
+          <tr>
+            <th class="px-4 py-3 text-left">Name</th>
+            <th class="px-4 py-3 text-left">Email</th>
+            <th class="px-4 py-3 text-left">Role</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for u in users %}
+          <tr class="border-b border-gray-800 hover:bg-gray-800/40 transition">
+            <td class="px-4 py-3 text-gray-200 font-medium">{{ u.name }}</td>
+            <td class="px-4 py-3 text-gray-300">{{ u.email }}</td>
+            <td class="px-4 py-3">
+              <span
+                class="px-3 py-1 rounded-full text-xs font-medium {% if u.role == 'admin' %} bg-blue-600 text-white {% else %} bg-gray-700 text-gray-300 {% endif %}"
+              >
+                {{ u.role }}
+              </span>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p class="text-gray-400">No users found.</p>
+    {% endif %}
+  </section>
+
+  <!-- Exams Section -->
+  <section
+    class="bg-gray-900/70 backdrop-blur-md border border-gray-700 rounded-2xl shadow-xl p-8"
+  >
+    <div class="flex justify-between items-center mb-6">
+      <h3 class="text-2xl font-semibold text-white">All Exams</h3>
+      <div class="text-gray-400 text-sm">
+        Total Exams:
+        <span class="text-blue-400 font-medium">{{ exams|length }}</span>
+      </div>
+    </div>
+
+    {% if exams %}
+    <div class="overflow-x-auto">
+      <table class="min-w-full text-sm border-collapse">
+        <thead class="text-gray-400 border-b border-gray-700">
+          <tr>
+            <th class="px-4 py-3 text-left">Title</th>
+            <th class="px-4 py-3 text-left">Subject</th>
+            <th class="px-4 py-3 text-left">Date</th>
+            <th class="px-4 py-3 text-left">Owner</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for e in exams %}
+          <tr class="border-b border-gray-800 hover:bg-gray-800/40 transition">
+            <td class="px-4 py-3 text-gray-200 font-medium">{{ e.title }}</td>
+            <td class="px-4 py-3 text-gray-300">{{ e.subject }}</td>
+            <td class="px-4 py-3 text-gray-400">
+              {{ (e.date|replace('T',' ')|replace('Z','')) }}
+            </td>
+            <td class="px-4 py-3 text-gray-300">
+              {{ e.userId.name if e.userId else '—' }}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p class="text-gray-400">No exams found.</p>
+    {% endif %}
+  </section>
+</div>
+
+{% endblock %}

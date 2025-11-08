@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>{% block title %}Exam Planner{% endblock %}</title>
+    <!-- Tailwind CDN (simple) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      /* small custom tweak for glass effect */
+      .glass {
+        background: rgba(17, 24, 39, 0.65);
+        backdrop-filter: blur(6px);
+      }
+    </style>
+  </head>
+  <body
+    class="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white"
+  >
+    <div class="container mx-auto px-4 py-8">
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      messages %}
+      <div class="space-y-2 mb-4">
+        {% for cat, msg in messages %}
+        <div
+          class="p-3 rounded-lg {% if cat=='danger' %}bg-red-700{% else %}bg-green-700{% endif %}"
+        >
+          {{ msg }}
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %} {% endwith %} {% block content %}{% endblock %}
+    </div>
+  </body>
+</html>

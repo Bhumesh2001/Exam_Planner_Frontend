@@ -1,0 +1,130 @@
+{% extends "base.html" %} {% block title %}Exams — Exam Planner{% endblock %} {%
+block content %}
+
+<div class="w-full px-8 py-6">
+  <header
+    class="flex justify-between items-center mb-8 border-b border-gray-700 pb-4"
+  >
+    <h2 class="text-3xl font-bold text-white">Exams</h2>
+    <div class="flex items-center gap-4">
+      <a
+        href="{{ url_for('dashboard') }}"
+        class="text-gray-300 hover:text-blue-400 transition"
+        >Back</a
+      >
+      <button
+        id="openModal"
+        class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-white font-medium transition"
+      >
+        + Add Exam
+      </button>
+    </div>
+  </header>
+
+  <!-- Exams List -->
+  <section
+    class="bg-gray-900/70 backdrop-blur-md border border-gray-700 rounded-2xl shadow-xl p-8"
+  >
+    <h3 class="text-2xl font-semibold mb-6 text-white">Upcoming Exams</h3>
+    {% if exams %}
+    <ul class="divide-y divide-gray-700">
+      {% for e in exams %}
+      <li
+        class="py-4 flex justify-between items-center hover:bg-gray-800/40 rounded-lg px-3 transition"
+      >
+        <div>
+          <div class="font-semibold text-gray-100 text-lg">{{ e.title }}</div>
+          <div class="text-gray-400 text-sm">
+            {{ e.subject }} • {{ (e.date|replace('T',' ')|replace('Z','')) }}
+          </div>
+        </div>
+        <form action="{{ url_for('delete_exam', id=e._id) }}" method="post">
+          <button
+            class="px-3 py-1 bg-red-600 hover:bg-red-700 rounded-lg text-white transition"
+          >
+            Delete
+          </button>
+        </form>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p class="text-gray-400">No exams found.</p>
+    {% endif %}
+  </section>
+</div>
+
+<!-- Modal -->
+<div
+  id="examModal"
+  class="fixed inset-0 hidden items-center justify-center bg-black/60 z-50"
+>
+  <div
+    class="bg-gray-900 border border-gray-700 rounded-2xl shadow-2xl p-8 w-full max-w-lg relative"
+  >
+    <button
+      id="closeModal"
+      class="absolute top-4 right-4 text-gray-400 hover:text-gray-200 text-xl"
+    >
+      ✕
+    </button>
+    <h3 class="text-2xl font-semibold mb-6 text-white">Add New Exam</h3>
+
+    <form method="post" class="grid gap-4">
+      <input
+        name="title"
+        placeholder="Title"
+        class="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white"
+      />
+      <input
+        name="subject"
+        placeholder="Subject"
+        class="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white"
+      />
+      <input
+        name="date"
+        type="datetime-local"
+        class="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white"
+      />
+      <input
+        name="priority"
+        type="number"
+        placeholder="Priority"
+        class="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white"
+      />
+
+      <button
+        type="submit"
+        class="w-full py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-white font-medium transition"
+      >
+        Save Exam
+      </button>
+    </form>
+  </div>
+</div>
+
+<script>
+  const modal = document.getElementById("examModal");
+  const openModal = document.getElementById("openModal");
+  const closeModal = document.getElementById("closeModal");
+
+  openModal.addEventListener("click", () => {
+    modal.classList.remove("hidden");
+    modal.classList.add("flex");
+  });
+
+  closeModal.addEventListener("click", () => {
+    modal.classList.remove("flex");
+    modal.classList.add("hidden");
+  });
+
+  // Close modal on outside click
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      modal.classList.remove("flex");
+      modal.classList.add("hidden");
+    }
+  });
+</script>
+
+{% endblock %}
